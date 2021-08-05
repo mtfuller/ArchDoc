@@ -1,0 +1,38 @@
+.LegacyGraph svg {
+    width: 100%;
+    height: 100%;
+}
+
+.LegacyGraph svg .links line {
+    stroke: #dadada;
+    stroke-opacity: 0.6;
+  }
+  
+.LegacyGraph svg .nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.LegacyGraph svg .nodes text {
+    pointer-events: none;
+    -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+.LegacyGraph svg .nodes .touch {
+    cursor: pointer;
+}
+
+.LegacyGraph svg .selected circle {
+    stroke: rgb(255, 255, 0);
+    stroke-width: 3.5px;
+}
+
+.LegacyGraph svg .nodes text {
+    font-size: small;
+    font-family: monospace;
+    font-weight: 900;
+    fill: white;
+}
