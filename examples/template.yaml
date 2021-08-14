@@ -1,0 +1,18 @@
+version: 0.1.0
+
+components:
+# <COMPONENT NAME>:
+#   type: user or service
+#   uses: List of component names that this component depends on
+#     - <COMPONENT NAME>
+#     - <COMPONENT NAME>
+  client:
+    type: user
+    uses:
+      - ui
+  ui:
+    type: service
+    uses:
+      - api
+  api:
+    type: service
