@@ -1,0 +1,6 @@
+version: "1.0.0"
+components:
+  fun:
+    type: invalid
+    uses:
+      - ui

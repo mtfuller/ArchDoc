@@ -3,15 +3,18 @@ import * as ReactDOM from 'react-dom';
 import { useRef, useState } from 'react';
 
 import CounterService from './adapters/CounterService';
+import ArchDocService from './adapters/ArchdocService';
+
 import LegacyGraph from './components/LegacyGraph';
 
 import './styles.css';
 import Sidebar from './components/Sidebar';
 import HBox from './components/HBox';
 import Box from './components/Box';
+import { generateGraphFromArchdoc } from './util/Archdoc';
 
 const MyForm = (props) => {
-    const inputFile = useRef(null) 
+    const inputFile = useRef<any>(null) 
     
     const [state, setState] = useState({
         filepath: ""
@@ -24,12 +27,16 @@ const MyForm = (props) => {
 
     return <div>
         <input type='file' ref={inputFile} style={{display: 'none'}} onChange={handleFileSelect}/>
-        <button onClick={e => inputFile.current.click()}></button>
+        <button onClick={e => {if (inputFile.current === null) return; inputFile.current.click()}}></button>
     </div>;
 }
 
 const App = () => {
     const [num, setNum] = useState(0);
+    const [graph, setGraph] = useState({
+        nodes: [],
+        edges: []
+    });
     const [text, setText] = useState("Default");
 
     const handleIncrement = () => {
@@ -47,8 +54,14 @@ const App = () => {
         setText(id);
     }
 
-    const handleFileSelect = (filePath: string) => {
-        console.log(filePath);
+    const handleFileSelect = async (filePath: string) => {
+        const obj = await ArchDocService.loadArchdocFile(filePath);
+        console.log("Renderer: Recieved from service:");
+        console.log(obj);
+        if (obj === null) return;
+        const newGraph = generateGraphFromArchdoc(obj);
+        console.log(newGraph);
+        setGraph(newGraph);
     }
 
     return <HBox>
@@ -56,7 +69,7 @@ const App = () => {
             <MyForm onFileSelect={handleFileSelect} />
         </Box>
         <Box width={100} isResizable={false}>
-            <LegacyGraph onSelect={handleSelect} />
+            <LegacyGraph graph={graph} onSelect={handleSelect} />
         </Box>
         <Box width={100} isResizable={true}>
             <Sidebar value={text}/>
