@@ -5,8 +5,6 @@ export function serviceClientFactory<T>(name: string): T {
 
     const serviceMethods = ipcRenderer.sendSync(name);
 
-    console.log(serviceMethods);
-
     serviceMethods.forEach(serviceMethod => {
         const channel = `${name}.${serviceMethod}`;
 

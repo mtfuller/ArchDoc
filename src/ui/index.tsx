@@ -27,7 +27,7 @@ const MyForm = (props) => {
 
     return <div>
         <input type='file' ref={inputFile} style={{display: 'none'}} onChange={handleFileSelect}/>
-        <button onClick={e => {if (inputFile.current === null) return; inputFile.current.click()}}></button>
+        <button onClick={e => {if (inputFile.current === null) return; inputFile.current.click()}}>OPEN</button>
     </div>;
 }
 
@@ -56,12 +56,12 @@ const App = () => {
 
     const handleFileSelect = async (filePath: string) => {
         const obj = await ArchDocService.loadArchdocFile(filePath);
-        console.log("Renderer: Recieved from service:");
-        console.log(obj);
-        if (obj === null) return;
-        const newGraph = generateGraphFromArchdoc(obj);
-        console.log(newGraph);
-        setGraph(newGraph);
+
+        if (obj !== null) {
+            const newGraph = generateGraphFromArchdoc(obj);
+            console.log(newGraph);
+            setGraph(newGraph);
+        }
     }
 
     return <HBox>

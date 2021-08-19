@@ -3,8 +3,13 @@ import { useEffect } from "react"
 import * as d3 from "d3";
 import './LegacyGraph.css';
 
+interface IGraph {
+    nodes: any[],
+    edges: any[]
+}
+
 interface IProps {
-    graph: IState;
+    graph: IGraph;
     onSelect: (id: string) => void;
 }
 
@@ -14,32 +19,17 @@ interface D3Node {
     y: number
 }
 
-interface IState {
-    nodes: any[],
-    edges: any[]
-}
-
-export default class LegacyGraph extends React.Component<IProps, IState> {
-    //state: IState;
+export default class LegacyGraph extends React.Component<IProps> {
     svgReference: React.RefObject<SVGSVGElement>
     onSelect: (id: string) => void
 
     constructor(props: IProps) {
         super(props);
-
-        //this.state = props.graph;
-
         this.svgReference = React.createRef();
         this.onSelect = props.onSelect;
     }
 
     componentDidUpdate(previousProps, previousState) {
-        console.log(`LegacyGraph::useEffect`);
-        // console.log(previousProps);
-        // console.log(previousState);
-        // console.log(this.state);
-        // console.log(this.props);
-
         const onSelect = this.onSelect;
 
         const svg = d3.select("svg");
@@ -181,8 +171,6 @@ export default class LegacyGraph extends React.Component<IProps, IState> {
     }
 
     render() {
-        console.log(`render()`);
-        // console.log(this.state);
         return <div className="LegacyGraph">
             <svg viewBox="0 0 600 800" 
                 preserveAspectRatio="xMidYMid meet"
