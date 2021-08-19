@@ -1,0 +1,23 @@
+version: 0.1.0
+
+components:
+  client:
+    type: user
+    uses:
+      - ui
+  ui:
+    type: service
+    uses:
+      - api
+  api:
+    type: service
+    uses:
+     - recipe
+     - auth
+     - product
+  recipe:
+    type: service
+  auth:
+    type: service
+  product:
+    type: service

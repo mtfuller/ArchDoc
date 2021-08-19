@@ -5,6 +5,7 @@ import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import { ipcMain } from 'electron';
 import './services/counter/CounterService';
+import './services/archdoc/ArchdocService';
 
 function createWindow () {
   // Create the browser window.
@@ -22,8 +23,8 @@ function createWindow () {
 
   mainWindow.setMenu(null);
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  //Open the DevTools.
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

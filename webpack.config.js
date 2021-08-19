@@ -45,13 +45,13 @@ module.exports = [
         output: { path: path.join(__dirname, "build"), filename: "main.bundle.js" },
         mode: process.env.NODE_ENV || "development",
         resolve: {
-            extensions: [".ts"],
+            extensions: [".ts", '.js'],
         },
         module: {
             rules: [
                 {
                     test: /\.ts$/,
-                    exclude: /node_modules/,
+                    //exclude: /node_modules/,
                     use: ["ts-loader"],
                 }
             ],

@@ -1,5 +1,5 @@
-import ArchdocModel from "./Archdoc.model";
+import { IArchdocSchema } from "./ArchdocSchema";
 
 export default interface IArchdocService {
-    loadArchdocFile(filePath: string): ArchdocModel;
+    loadArchdocFile(filePath: string): Promise<IArchdocSchema | null>;
 }

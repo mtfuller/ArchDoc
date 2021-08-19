@@ -22,17 +22,17 @@ class ServiceRegistry {
 
             ipcMain.on(serviceName, (event, args) => {
                 console.log(`EventTransport::registerServiceMethod - Received event for ${serviceName} with args: ${args}`);
-                event.returnValue = service.getMethods();
+                event.returnValue = service?.getMethods();
             });
         }
 
         const methodChannel = `${serviceName}.${methodName}`;
         console.log(`EventTransport::registerServiceMethod - Registering ${methodChannel}...`);
 
-        this.registeredServices.get(serviceName).addMethod(methodName);
-        ipcMain.on(methodChannel, (event, args) => {
+        this.registeredServices.get(serviceName)?.addMethod(methodName);
+        ipcMain.on(methodChannel, async (event, args) => {
             console.log(`EventTransport::registerServiceMethod - Received event for ${methodChannel} with args: ${args} (${typeof args})`);
-            const value = this.registeredServices.get(serviceName).instance[methodName](args);
+            const value = await this.registeredServices.get(serviceName)?.instance[methodName](args);
             console.log(`EventTransport::registerServiceMethod - ret: ${value} (${typeof value})`);
             event.returnValue = value;
         });

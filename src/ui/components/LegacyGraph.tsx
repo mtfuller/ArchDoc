@@ -3,8 +3,14 @@ import { useEffect } from "react"
 import * as d3 from "d3";
 import './LegacyGraph.css';
 
+interface IGraph {
+    nodes: any[],
+    edges: any[]
+}
+
 interface IProps {
-    onSelect: (id: string) => void
+    graph: IGraph;
+    onSelect: (id: string) => void;
 }
 
 interface D3Node {
@@ -13,45 +19,22 @@ interface D3Node {
     y: number
 }
 
-interface IState {
-    nodes: any[],
-    edges: any[]
-}
-
-export default class LegacyGraph extends React.Component<IProps, IState> {
-    state: IState;
+export default class LegacyGraph extends React.Component<IProps> {
     svgReference: React.RefObject<SVGSVGElement>
     onSelect: (id: string) => void
 
     constructor(props: IProps) {
         super(props);
-
-        this.state = {
-            nodes: [
-                {id: "client", color: "lightblue", r:20, user: true, selected: false},
-                {id: "api", color: "lightblue", r:20, user: true, selected: false},
-                {id: "recipe", color: "blue", r:20, user: false, selected: false},
-                {id: "product", color: "green", r:20, user: false, selected: false},
-                {id: "payment", color: "green", r:20, user: false, selected: false}
-              ],
-              edges: [
-                {"source": "client", "target": "api", "value": 2, type: "end"},
-                {"source": "api", "target": "recipe", "value": 2, type: "end"},
-                {"source": "api", "target": "product", "value": 2, type: "end"},
-                {"source": "api", "target": "payment", "value": 2, type: "end"}
-            ]
-        }
-
         this.svgReference = React.createRef();
         this.onSelect = props.onSelect;
     }
 
-    componentDidMount() {
-        console.log(`LegacyGraph::useEffect`);
-
+    componentDidUpdate(previousProps, previousState) {
         const onSelect = this.onSelect;
 
         const svg = d3.select("svg");
+
+        svg.html(null);
 
         svg.append("defs").selectAll("marker")
             .data(["end"])
@@ -71,14 +54,14 @@ export default class LegacyGraph extends React.Component<IProps, IState> {
         const height = 800;//+svg.attr("height");
         const radius = 30;
 
-        const simulation = d3.forceSimulation(this.state.nodes)
-            .force("link", d3.forceLink(this.state.edges).id(function(d) { return d.id; }).distance(120))
+        const simulation = d3.forceSimulation(this.props.graph.nodes)
+            .force("link", d3.forceLink(this.props.graph.edges).id(function(d) { return d.id; }).distance(120))
             .force("charge", d3.forceManyBody().strength(-100))
             .force("collide", d3.forceCollide().radius(d => d.r * 1.3))
             .force("center", d3.forceCenter(width / 2, height / 2));
 
         const node = svg.selectAll("g")
-            .data(this.state.nodes)
+            .data(this.props.graph.nodes)
 
         const nodeContent = node.enter()
             .append("g")
@@ -132,7 +115,7 @@ export default class LegacyGraph extends React.Component<IProps, IState> {
         const link = svg.insert("g", ":first-child")
             .attr("class", "links")
             .selectAll("line")
-            .data(this.state.edges)
+            .data(this.props.graph.edges)
             .enter().append("line")
             .attr("stroke-width", function(d) { return d.value; })
             .attr("marker-end", d => `url(#arrow-${d.type})`);
