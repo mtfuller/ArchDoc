@@ -1,4 +1,6 @@
-import { IArchdocSchema, ComponentTypes } from "../../services/archdoc/ArchdocSchema";
+import { ComponentTypes } from "../../services/archdoc/schema/ComponentTypes";
+import { IArchdocSchema } from "../../services/archdoc/schema/IArchdocSchema";
+
 
 export function generateGraphFromArchdoc(archdocSchema: IArchdocSchema): any {
     const componentNames = Object.keys(archdocSchema.components);
@@ -10,6 +12,7 @@ export function generateGraphFromArchdoc(archdocSchema: IArchdocSchema): any {
         return {
             name,
             type,
+            description: component.description,
             uses: (component.uses !== undefined) ? component.uses : []
         }
     });
@@ -19,7 +22,8 @@ export function generateGraphFromArchdoc(archdocSchema: IArchdocSchema): any {
         color: "lightblue",
         r: 20,
         user: (x.type === ComponentTypes.USER),
-        selected: false
+        selected: false,
+        description: x.description
     }));
     console.log(nodes);
 

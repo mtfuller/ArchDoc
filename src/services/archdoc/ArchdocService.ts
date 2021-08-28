@@ -1,17 +1,20 @@
 import fs from 'fs/promises';
+import path from 'path';
 import * as yaml from 'js-yaml';
 import Ajv from 'ajv';
 
 import { ServiceMethod } from "../../transport/ServiceRegistry";
-import { ArchdocSchema, IArchdocSchema } from './ArchdocSchema';
+import { ArchdocSchemaType } from './schema/ArchdocSchema';
 import IArchdocService from './IArchdocService';
+import { ArchdocWorkspace } from './ArchdocWorkspace';
+import { IArchdocSchema } from './schema/IArchdocSchema';
 
 const ajv = new Ajv({code: {es5: true}});
 
 export class ArchdocService implements IArchdocService {
     @ServiceMethod
     async loadArchdocFile(filePath: string): Promise<IArchdocSchema | null> {
-        const validate = ajv.compile(ArchdocSchema);
+        const validate = ajv.compile(ArchdocSchemaType);
 
         let yamlSpec: object = {};
         try {
@@ -28,7 +31,13 @@ export class ArchdocService implements IArchdocService {
         }
 
         if (validate(yamlSpec)) {
-            return <IArchdocSchema> yamlSpec;
+            const archdocSchema = <IArchdocSchema> yamlSpec;
+
+            const workspace = new ArchdocWorkspace(filePath);
+
+            const finalArchdocSchema = workspace.parseArchdocSchemaProperties(archdocSchema);
+
+            return finalArchdocSchema;
         } else {
             console.log(validate.errors);
         }
