@@ -49,9 +49,13 @@ const App = () => {
         setNum(newNum);
     }
 
-    const handleSelect = (id) => {
+    const handleSelect = (id, description) => {
         console.log(`Received: ${id}`);
-        setText(id);
+        if (typeof description !== "string" || description.length === 0) {
+            setText("");
+        } else {
+            setText(description);
+        }
     }
 
     const handleFileSelect = async (filePath: string) => {

@@ -1,21 +1,9 @@
 import { JSONSchemaType } from 'ajv';
+import { ComponentTypes } from './ComponentTypes';
+import { IArchdocSchema } from './IArchdocSchema';
 
-export enum ComponentTypes {
-    USER = "user",
-    SERVICE = "service"
-}
 
-export interface IComponentSchema {
-    type: ComponentTypes,
-    uses: string[]
-}
-
-export interface IArchdocSchema {
-    version: string
-    components: Record<string, IComponentSchema>
-}
-
-export const ArchdocSchema: JSONSchemaType<IArchdocSchema> = {
+export const ArchdocSchemaType: JSONSchemaType<IArchdocSchema> = {
     type: "object",
     properties: {
         version: {type: "string"},
@@ -26,6 +14,7 @@ export const ArchdocSchema: JSONSchemaType<IArchdocSchema> = {
                     type: "object",
                     properties: {
                         type: {type: 'string', enum: [ComponentTypes.USER, ComponentTypes.SERVICE]},
+                        description: {type: 'string'},
                         uses: {
                             type: "array",
                             items: {

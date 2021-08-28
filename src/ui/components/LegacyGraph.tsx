@@ -10,7 +10,7 @@ interface IGraph {
 
 interface IProps {
     graph: IGraph;
-    onSelect: (id: string) => void;
+    onSelect: (id: string, description: string) => void;
 }
 
 interface D3Node {
@@ -19,17 +19,26 @@ interface D3Node {
     y: number
 }
 
-export default class LegacyGraph extends React.Component<IProps> {
+interface IState {
+    selectedComponent: string | null
+}
+
+export default class LegacyGraph extends React.Component<IProps, IState> {
     svgReference: React.RefObject<SVGSVGElement>
-    onSelect: (id: string) => void
+    onSelect: (id: string, description: string) => void
 
     constructor(props: IProps) {
         super(props);
         this.svgReference = React.createRef();
         this.onSelect = props.onSelect;
+        this.state = {
+            selectedComponent: null
+        }
     }
 
     componentDidUpdate(previousProps, previousState) {
+        console.log(`LegacyGraph::componentDidUpdate`);
+        console.log(this.state);
         const onSelect = this.onSelect;
 
         const svg = d3.select("svg");
@@ -109,6 +118,10 @@ export default class LegacyGraph extends React.Component<IProps> {
             .attr("class", "touch")
             .attr("opacity", "0.0");
 
+        const currentComponent = this.state.selectedComponent;
+        nodeContent.filter(function(d) { return d.id === currentComponent; })
+            .classed("selected", true);
+
         nodeContent.append("title")
             .text(function(d) { return d.id; });
 
@@ -155,12 +168,13 @@ export default class LegacyGraph extends React.Component<IProps> {
             event.subject.fy = null;
         }
 
+        const setState = (newState) => this.setState(newState);
         function handleClick(event, d) {
             console.log(`Node ${d.id} was clicked!`);
-            nodeContent.classed("selected", false);
-            d3.select(this).classed("selected", true);
-
-            onSelect(d.id);
+            setState({
+                selectedComponent: d.id
+            })
+            onSelect(d.id, d.description);
         }
 
         nodeContent.call(d3.drag()

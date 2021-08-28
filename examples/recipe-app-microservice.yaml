@@ -3,20 +3,24 @@ version: 0.1.0
 components:
   client:
     type: user
+    description: $file(./docs/auth-service.md)
     uses:
       - ui
   ui:
     type: service
+    description: $fifjowijf()
     uses:
       - api
   api:
     type: service
+    description: My fun description
     uses:
      - recipe
      - auth
      - product
   recipe:
     type: service
+    description: "My other description"
   auth:
     type: service
   product:
