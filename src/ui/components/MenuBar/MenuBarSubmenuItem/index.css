@@ -1,0 +1,10 @@
+.MenuBarSubmenuItem {
+    font-family: 'Roboto', sans-serif;
+    font-size: small;
+    padding: 5px 10px;
+}
+
+.MenuBarSubmenuItem:hover {
+    background-color: rgb(240, 240, 240);
+    cursor: pointer;
+}

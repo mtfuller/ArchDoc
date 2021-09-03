@@ -1,6 +1,14 @@
 import { ComponentTypes } from "../../services/archdoc/schema/ComponentTypes";
 import { IArchdocSchema } from "../../services/archdoc/schema/IArchdocSchema";
 
+const getColorFromComponentType = (type: ComponentTypes): string => {
+    switch (type) {
+        case ComponentTypes.USER:
+            return "#05C7F2"
+        case ComponentTypes.SERVICE:
+            return "#056CF2"
+    }
+}
 
 export function generateGraphFromArchdoc(archdocSchema: IArchdocSchema): any {
     const componentNames = Object.keys(archdocSchema.components);
@@ -19,7 +27,7 @@ export function generateGraphFromArchdoc(archdocSchema: IArchdocSchema): any {
 
     const nodes = components.map(x => ({
         id: x.name,
-        color: "lightblue",
+        color: getColorFromComponentType(x.type),
         r: 20,
         user: (x.type === ComponentTypes.USER),
         selected: false,

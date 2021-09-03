@@ -1,0 +1,19 @@
+.InfoPanel {
+    padding: 0px 15px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.InfoPanel .info-group {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.InfoPanel .info-group small {
+    color: #CCC;
+}
+
+.InfoPanel .info-group .title {
+    margin: 0px;
+    margin-top: 10px;
+    font-size: 26px;
+}

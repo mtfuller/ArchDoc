@@ -1,0 +1,16 @@
+.MenuBarWindowButton {
+    width: 45px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.MenuBarWindowButton:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.MuiSvgIcon-fontSizeSmall-override {
+    font-size: 0.85rem !important;
+}

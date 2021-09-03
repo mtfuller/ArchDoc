@@ -1,0 +1,14 @@
+.Layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.Layout .middle-row {
+    display: flex;
+    flex: 1;
+}
+
+.Layout .center-pane {
+    flex: 1;
+}
