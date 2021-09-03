@@ -1,5 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+const packageConfig = require('./package.json');
 
 module.exports = [
     {
@@ -37,6 +39,10 @@ module.exports = [
             new HtmlWebpackPlugin({
                 template: path.join(__dirname, "src", "ui", "index.html"),
             }),
+            new webpack.DefinePlugin({
+                ENV: JSON.stringify("ELECTRON"),
+                VERSION: JSON.stringify(packageConfig.version),
+            })
         ],
     },
     {

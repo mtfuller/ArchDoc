@@ -2,63 +2,57 @@ import * as ReactDOM from 'react-dom';
 
 import { useRef, useState } from 'react';
 
-import CounterService from './adapters/CounterService';
 import ArchDocService from './adapters/ArchdocService';
 
-import LegacyGraph from './components/LegacyGraph';
-
 import './styles.css';
-import Sidebar from './components/Sidebar';
-import HBox from './components/HBox';
-import Box from './components/Box';
 import { generateGraphFromArchdoc } from './util/Archdoc';
+import Layout from './components/Layout';
+import MenuBar from './components/MenuBar';
+import InfoPanel from './components/InfoPanel';
+import Graph from './components/Graph';
+import { Menu } from './components/MenuBar/Menu';
 
-const MyForm = (props) => {
-    const inputFile = useRef<any>(null) 
-    
-    const [state, setState] = useState({
-        filepath: ""
-    });
+// @ts-ignore: Unreachable code error
+const APP_VERSION: string = VERSION;
 
-    const handleFileSelect = (event) => {
-        const filePath = event.target.files[0].path;
-        props.onFileSelect(filePath);
-    }
-
-    return <div>
-        <input type='file' ref={inputFile} style={{display: 'none'}} onChange={handleFileSelect}/>
-        <button onClick={e => {if (inputFile.current === null) return; inputFile.current.click()}}>OPEN</button>
-    </div>;
+interface IInfoState {
+    name: string
+    value: string
 }
 
+const startVersionDialog = () => {alert(`ArchDoc v${APP_VERSION}`);};
+
 const App = () => {
+    const inputFile = useRef<any>(null);
+
     const [num, setNum] = useState(0);
     const [graph, setGraph] = useState({
         nodes: [],
         edges: []
     });
-    const [text, setText] = useState("Default");
-
-    const handleIncrement = () => {
-        const newNum = CounterService.increment(1);
-        setNum(newNum);
-    }
-
-    const handleDecrement = () => {
-        const newNum = CounterService.decrement(1);
-        setNum(newNum);
-    }
+    const [infoState, setInfoState] = useState<IInfoState>({
+        name: "Default View",
+        value: ""
+    });
 
     const handleSelect = (id, description) => {
         console.log(`Received: ${id}`);
         if (typeof description !== "string" || description.length === 0) {
-            setText("");
+            setInfoState({
+                name: "",
+                value: ""
+            });
         } else {
-            setText(description);
+            setInfoState({
+                name: id,
+                value: description
+            });
         }
     }
 
-    const handleFileSelect = async (filePath: string) => {
+    const handleFileSelect = async (event: any) => {
+        const filePath = event.target.files[0].path;
+
         const obj = await ArchDocService.loadArchdocFile(filePath);
 
         if (obj !== null) {
@@ -68,18 +62,40 @@ const App = () => {
         }
     }
 
-    return <HBox>
-        <Box width={100} isResizable={false}>
-            <MyForm onFileSelect={handleFileSelect} />
-        </Box>
-        <Box width={100} isResizable={false}>
-            <LegacyGraph graph={graph} onSelect={handleSelect} />
-        </Box>
-        <Box width={100} isResizable={true}>
-            <Sidebar value={text}/>
-        </Box>
-        
-    </HBox>;
+    const startVersionDialog = () => {alert(`ArchDoc v${APP_VERSION}`);};
+
+    const menu: Menu = {
+        submenus: [
+            {
+                name: "File",
+                items: [
+                    {name: "Open", action: () => {if (inputFile.current === null) return; inputFile.current.click()}}
+                ]
+            },
+            {
+                name: "Help",
+                items: [
+                    {name: "Version", action: startVersionDialog}
+                ]
+            }
+        ]
+    };
+
+    return <div>
+        <input type='file' ref={inputFile} style={{display: 'none'}} onChange={handleFileSelect}/>
+        <Layout
+            topPane={
+                <MenuBar menu={menu} />
+            }
+
+            centerPane={
+                <Graph graph={graph} onSelect={handleSelect} />
+            }
+
+            rightPane={
+                <InfoPanel name={infoState.name} value={infoState.value} />
+            } />
+    </div>;
 }
 
 ReactDOM.render(

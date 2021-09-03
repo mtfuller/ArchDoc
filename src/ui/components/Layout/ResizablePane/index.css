@@ -1,0 +1,28 @@
+.ResizablePane {
+    height: 100%;
+    flex: 0;
+    display: flex;
+}
+
+.ResizablePane .bar {
+    cursor: ew-resize;
+    position: absolute;
+}
+
+.ResizablePane.right .bar {
+    left: -3px;
+}
+
+.ResizablePane.left .bar {
+    left: 3px;
+}
+
+.ResizablePane.right .contents {
+    left: 3px;
+    border-right: 1px solid black;
+}
+
+.ResizablePane.left .contents {
+    left: -3px;
+    border-left: 1px solid black;
+}

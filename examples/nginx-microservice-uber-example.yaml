@@ -1,0 +1,73 @@
+version: 0.1.0
+
+components:
+  users:
+    type: user
+    description: "Passengers and drivers."
+    uses:
+      - passenger-web-ui
+      - driver-web-ui
+
+  integrators:
+    type: user
+    description: "Third-party partners that have integrated with our system."
+    uses:
+      - api-gateway
+
+  mobile-app:
+    type: user
+    description: "Our Mobile App that passengers and drivers use."
+    uses:
+      - api-gateway
+
+  api-gateway:
+    type: service
+    description: "API gateway provides and easy way for integrators to use and interact with the system."
+    uses:
+      - passenger-management
+      - driver-management
+      - trip-management
+
+  passenger-management:
+    type: service
+    description: "Manages all data for passengers."
+    uses:
+      - payments-service
+
+  billing-service:
+    type: service
+    description: "Used to bill passengers for driver services."
+
+  passenger-web-ui:
+    type: service
+    description: "Presents a UI used by passengers."
+    uses:
+      - passenger-management
+      - driver-management
+
+  driver-management:
+    type: service
+    description: "Manages all data for drivers."
+    uses:
+      - payments-service
+      - notification-service
+
+  payments-service:
+    type: service
+    description: "Manages all payments sent by passengers."
+
+  driver-web-ui:
+    type: service
+    description: "Presents a UI used by drivers."
+    uses:
+      - driver-management
+
+  trip-management:
+    type: service
+    description: "Manages all current in-flight trips."
+    uses:
+      - billing-service
+
+  notification-service:
+    type: service
+    description: "Sends relevant notifications out to users."

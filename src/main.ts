@@ -4,19 +4,13 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import { ipcMain } from 'electron';
-import './services/counter/CounterService';
+import Window from './services/window/Window';
 import './services/archdoc/ArchdocService';
+import './services/window/WindowService';
 
 function createWindow () {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-    }
-  })
+  const mainWindow = Window.getInstance()
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));

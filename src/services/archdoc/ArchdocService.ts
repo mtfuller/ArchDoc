@@ -1,5 +1,4 @@
 import fs from 'fs/promises';
-import path from 'path';
 import * as yaml from 'js-yaml';
 import Ajv from 'ajv';
 

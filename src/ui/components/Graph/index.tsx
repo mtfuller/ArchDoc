@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useEffect } from "react"
 import * as d3 from "d3";
-import './LegacyGraph.css';
+import './index.css';
 
 interface IGraph {
     nodes: any[],
@@ -23,7 +23,7 @@ interface IState {
     selectedComponent: string | null
 }
 
-export default class LegacyGraph extends React.Component<IProps, IState> {
+export default class Graph extends React.Component<IProps, IState> {
     svgReference: React.RefObject<SVGSVGElement>
     onSelect: (id: string, description: string) => void
 
@@ -37,11 +37,11 @@ export default class LegacyGraph extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(previousProps, previousState) {
-        console.log(`LegacyGraph::componentDidUpdate`);
+        console.log(`Graph::componentDidUpdate`);
         console.log(this.state);
         const onSelect = this.onSelect;
 
-        const svg = d3.select("svg");
+        const svg = d3.select("svg.abc");
 
         svg.html(null);
 
@@ -60,7 +60,7 @@ export default class LegacyGraph extends React.Component<IProps, IState> {
             .attr("d", 'M0,-5L10,0L0,5');
 
         const width = 600;//+svg.attr("width");
-        const height = 800;//+svg.attr("height");
+        const height = 600;//+svg.attr("height");
         const radius = 30;
 
         const simulation = d3.forceSimulation(this.props.graph.nodes)
@@ -185,8 +185,8 @@ export default class LegacyGraph extends React.Component<IProps, IState> {
     }
 
     render() {
-        return <div className="LegacyGraph">
-            <svg viewBox="0 0 600 800" 
+        return <div className="Graph">
+            <svg className="abc" viewBox="0 0 600 600" 
                 preserveAspectRatio="xMidYMid meet"
                 ref={this.svgReference}></svg>
         </div>
